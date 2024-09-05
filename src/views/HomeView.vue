@@ -129,7 +129,7 @@ const headerList = [
     </div>
   </div>
   <!-- 头部 -->
-  <div class="bg-[#F0F3F5] w-full">
+  <div class="bg-[#F0F3F5] w-full mb-[40px]">
     <div class="h-[75px] w-[1024px] flex items-center mx-auto">
       <div class="text-[#208ACC] text-3xl font-bold ml-2 mr-8">
         <RouterLink to="/"> 豆瓣电影 </RouterLink>
