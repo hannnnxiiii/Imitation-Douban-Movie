@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue"
-
+import { Search } from "@element-plus/icons-vue"
 // 左侧导航栏信息
 const navList = [
   {
@@ -57,6 +57,39 @@ const hiddenDialog = () => {
     dialog.value.style.display = "none"
   }
 }
+// 搜索信息
+const searchInfo = ref("")
+// 头部导航栏信息
+const headerList = [
+  {
+    url: "",
+    name: "影讯&购票",
+  },
+  {
+    url: "",
+    name: "选电影",
+  },
+  {
+    url: "",
+    name: "电视剧",
+  },
+  {
+    url: "",
+    name: "排行榜",
+  },
+  {
+    url: "",
+    name: "影评",
+  },
+  {
+    url: "",
+    name: "2023年度榜单",
+  },
+  {
+    url: "",
+    name: "2023年度报告",
+  },
+]
 </script>
 
 <template>
@@ -93,6 +126,42 @@ const hiddenDialog = () => {
       <div class="px-3 mr-3 hover:cursor-pointer hover:text-white">
         登录/注册
       </div>
+    </div>
+  </div>
+  <!-- 头部 -->
+  <div class="bg-[#F0F3F5] w-full">
+    <div class="h-[75px] w-[1024px] flex items-center mx-auto">
+      <div class="text-[#208ACC] text-3xl font-bold ml-2 mr-8">
+        <RouterLink to="/"> 豆瓣电影 </RouterLink>
+      </div>
+      <el-input
+        v-model="searchInfo"
+        style="width: 470px"
+        placeholder="搜索电影、电视剧、综艺、影人"
+      />
+      <el-button :icon="Search" />
+    </div>
+    <!-- 头部导航栏 -->
+    <div class="h-10 w-[1024px] flex mx-auto items-center relative">
+      <ul class="flex">
+        <li
+          v-for="item in headerList"
+          :key="item.name"
+          class="ml-2 mr-6 text-sm text-[#208ACC] hover:text-white hover:bg-[#208ACC]"
+        >
+          <RouterLink to="/">
+            {{ item.name }}
+          </RouterLink>
+        </li>
+      </ul>
+      <a
+        href=""
+        class="w-[186px] h-24 absolute top-[-60px] left-[700px]"
+        style="
+          background: url(//img3.doubanio.com/dae/accounts/resources/78fadc7/movie/assets/annual_2023.png)
+            center/contain no-repeat;
+        "
+      ></a>
     </div>
   </div>
   <!-- 二级路由出口 -->
