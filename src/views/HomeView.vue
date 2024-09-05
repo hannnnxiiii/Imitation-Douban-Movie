@@ -139,7 +139,7 @@ const headerList = [
         style="width: 470px"
         placeholder="搜索电影、电视剧、综艺、影人"
       />
-      <el-button :icon="Search" />
+      <el-button :icon="Search" class="w-[30px]" type="info" />
     </div>
     <!-- 头部导航栏 -->
     <div class="h-10 w-[1024px] flex mx-auto items-center relative">
