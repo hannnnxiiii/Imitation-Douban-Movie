@@ -29,7 +29,18 @@ export default defineConfig({
       "/api": {
         target: "https://api.douban.com", // 目标 API 地址
         changeOrigin: true, // 允许跨域
-        rewrite: (path) => path.replace(/^\/api/, ""), // 将 /api 替换为空
+        rewrite: (path) => {
+          console.log("Rewriting API1 path:", path)
+          return path.replace(/^\/api/, "")
+        }, // 将 /api 替换为空
+      },
+      "/douban": {
+        target: "https://movie.douban.com",
+        changeOrigin: true,
+        rewrite: (path) => {
+          console.log("Rewriting API2 path:", path)
+          return path.replace(/^\/douban/, "")
+        },
       },
     },
   },

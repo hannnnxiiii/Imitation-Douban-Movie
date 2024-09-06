@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue"
-import { getNowShowingAPI } from "@/axios/listAPI.js"
+import { getNowShowingAPI, getPopFilmTagAPI } from "@/axios/listAPI.js"
 import router from "@/router"
 import RecentPopularComp from "@/components/RecentPopularComp.vue"
 // 当前页数
@@ -117,6 +117,12 @@ const popFilmNavList = ref<object>([
 ])
 // 最近热门电影列表
 const popFilmList = ref<object>([])
+// 获取最近热门电影导航标签
+const getPopFilmTag = async () => {
+  const res = await getPopFilmTagAPI()
+  console.log(res)
+}
+onMounted(() => getPopFilmTag())
 </script>
 
 <template>
