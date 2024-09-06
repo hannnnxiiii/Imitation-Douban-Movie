@@ -46,7 +46,7 @@ const navList = [
 ]
 // 鼠标滑入，显示弹窗
 // 绑定弹窗
-const dialog = ref(null)
+const dialog = ref<HTMLElement | null>(null)
 const showDialog = () => {
   if (dialog.value) {
     dialog.value.style.display = "block"

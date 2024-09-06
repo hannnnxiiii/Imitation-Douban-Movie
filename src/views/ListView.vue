@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from "vue"
 import { getNowShowingAPI } from "@/axios/listAPI.js"
 import router from "@/router"
+import RecentPopularComp from "@/components/RecentPopularComp.vue"
 // 当前页数
 const currentPage = ref(1)
 // 正在热映列表
@@ -103,6 +104,19 @@ const handelClick = (id: string) => {
     },
   })
 }
+// 最近热门电影导航标签
+const popFilmNavList = ref<object>([
+  "热门",
+  "国产剧",
+  "综艺",
+  "美剧",
+  "日剧",
+  "韩剧",
+  "日本动画",
+  "纪录片",
+])
+// 最近热门电影列表
+const popFilmList = ref<object>([])
 </script>
 
 <template>
@@ -111,7 +125,7 @@ const handelClick = (id: string) => {
     <div class="w-[675px] h-[3000px] bg-green-300">
       <!-- 正在热映 -->
       <div
-        class="h-[324px] bg-blue-300 overflow-hidden"
+        class="h-[324px] bg-blue-300 overflow-hidden mb-[36px]"
         v-if="nowShowingList.length !== 0"
       >
         <!-- 头部 -->
@@ -240,6 +254,10 @@ const handelClick = (id: string) => {
           <span>{{ castsStr }}</span>
         </div>
       </div>
+      <RecentPopularComp
+        :nav-list="popFilmNavList"
+        :item-list="popFilmList"
+      ></RecentPopularComp>
     </div>
     <!-- 右侧 -->
     <div class="w-[300px] h-[3000px] bg-amber-300"></div>
