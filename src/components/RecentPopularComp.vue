@@ -52,6 +52,8 @@ const translateCount = ref(0)
 // 下一页
 const handleNext = () => {
   if (carousel.value) {
+    console.log(1)
+
     carousel.value.next()
   }
 }
@@ -170,17 +172,79 @@ const carousel = ref<Carousel | null>(null)
     >
       <el-carousel-item v-for="item in 6" :key="item">
         <div class="flex flex-wrap">
-          <div
+          <el-popover
             v-for="(item, index) in 10"
-            class="w-[115px] h-[210px] bg-yellow-200 mr-[25px] mb-[10px] flex flex-col items-center"
-            :class="{ clearMargin: (index + 1) % 5 === 0 }"
+            placement="right-start"
+            :width="350"
+            trigger="hover"
+            :show-arrow="false"
+            :show-after="500"
+            transition="none"
           >
-            <img src="" alt="" class="h-[161px] bg-red-100 w-full" />
-            <div class="text-[13px] text-[#37A]">
-              狗镇
-              <span class="text-[#E09015] text-[13px]">7.0</span>
-            </div>
-          </div>
+            <template #reference>
+              <div
+                class="w-[115px] h-[210px] bg-yellow-200 mr-[25px] mb-[10px] flex flex-col items-center"
+                :class="{ clearMargin: (index + 1) % 5 === 0 }"
+              >
+                <img src="" alt="" class="h-[161px] bg-red-100 w-full" />
+                <div class="text-[13px] text-[#37A]">
+                  狗镇
+                  <span class="text-[#E09015] text-[13px]">7.0</span>
+                </div>
+              </div>
+            </template>
+            <template #default>
+              <div>
+                <!-- 上半部分 -->
+                <div class="p-[20px]">
+                  <!-- 电影名 -->
+                  <RouterLink to="/">
+                    <span
+                      class="text-[18px] text-[#37a] hover:text-white hover:bg-[#37a] hover:cursor-pointer"
+                      >因果报应 mahh (2024)
+                    </span>
+                  </RouterLink>
+                  <!-- 评分 -->
+                  <div class="flex items-center">
+                    <el-rate
+                      :model-value="4"
+                      disabled
+                      style="--el-rate-icon-margin: -1px"
+                    />
+                    <span class="text-[13px] text-[#ff9900] ml-[10px]">8</span>
+                  </div>
+                  <!-- 标签 -->
+                  <div class="flex justify-start items-start flex-wrap">
+                    <span
+                      class="bg-[#f5f5f5] text-[13px] px-[8px] py-[2px] rounded-[12px] mx-[3px] my-[3px]"
+                      v-for="item in 5"
+                      >94分钟</span
+                    >
+                  </div>
+                  <!-- 按钮 -->
+                  <div class="mt-[5px]">
+                    <el-button
+                      style="border-radius: 0%; width: 60px; height: 25px"
+                      >想看</el-button
+                    >
+                    <el-button
+                      style="border-radius: 0%; width: 60px; height: 25px"
+                      >看过</el-button
+                    >
+                  </div>
+                </div>
+                <!-- 短评 -->
+                <div
+                  class="border-t-[1px] bg-[#f5f5f5] p-[20px] text-[13px] text-[#666]"
+                >
+                  只能说坏人就是坏人，他会对自己家人好，但他还是人品低劣。好人就是好人，就算不是自己生的，还是会用正义和善良去对待，前边节奏太慢了，后边揭开一切，让人唏嘘，女孩子很坚强，警察比较有趣，虽然贪财，但真的办事
+                  <span class="text-[12px] text-[#aaa]"
+                    >- AAA-渔经理୧⍤⃝💖的短评</span
+                  >
+                </div>
+              </div>
+            </template>
+          </el-popover>
         </div>
       </el-carousel-item>
     </el-carousel>
@@ -270,5 +334,10 @@ const carousel = ref<Carousel | null>(null)
   height: 6px;
   border-radius: 50%;
   background-color: #6198d7;
+}
+:global(.el-popover.el-popper) {
+  border-radius: 0% !important;
+  box-shadow: none;
+  padding: 0;
 }
 </style>
