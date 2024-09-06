@@ -1,21 +1,19 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, Transition } from "vue"
+import { computed, onMounted, ref } from "vue"
 import { getNowShowingAPI } from "@/axios/listAPI.js"
 // 当前页数
 const currentPage = ref(1)
-const value = ref(2)
-const doubleValue = computed(() => value.value * 2)
 // 正在热映列表
 const nowShowingList = ref([])
 // 获取正在热映
 const getNowShowing = async () => {
-  console.log(1)
-
   const res = await getNowShowingAPI()
-  console.log(res)
   nowShowingList.value = res.data.subjects
+  nowShowingList.value.forEach((item: object) => {
+    item.rating.average = item.rating.average / 2
+  })
 }
-// onMounted(() => getNowShowing())
+onMounted(() => getNowShowing())
 // 翻页进度
 const translateCount = ref(0)
 // 下一页
@@ -30,21 +28,38 @@ const handlePrev = () => {
 const detailDialog = ref(null)
 // 弹窗倒计时
 let timer: number | null = null
+// 当前悬停的对象
+const currentItem = ref({})
+// 悬停对象的坐标
+const itemPosition = ref({
+  x: 0,
+  y: 0,
+})
+// 导演名
+const directorsStr = ref("")
+// 演员名
+const castsStr = ref("")
+// 悬浮框显示与否
+const dialogVisible = ref("none")
 // 鼠标移入，1s后显示详情弹窗
-const showDetailDialog = (index: number) => {
+const showDetailDialog = (event, item) => {
   timer = setTimeout(() => {
-    if (detailDialog.value) {
-      detailDialog.value[index].style.display = "block"
-    }
+    currentItem.value = item
+    console.log(currentItem.value)
+    directorsStr.value = item.directors.map((item) => item.name).join(" / ")
+    castsStr.value = item.casts.map((item) => item.name).join(" / ")
+    itemPosition.value.x = event.toElement.getBoundingClientRect().x + 125
+    itemPosition.value.y = event.toElement.getBoundingClientRect().y
+    dialogVisible.value = "block"
   }, 500)
 }
 // 鼠标移出，关闭定时器，立马隐藏详情弹窗
-const hideDetailDialog = (index: number) => {
+const hideDetailDialog = () => {
   if (timer) {
     clearTimeout(timer)
   }
   if (detailDialog.value) {
-    detailDialog.value[index].style.display = "none"
+    dialogVisible.value = "none"
   }
 }
 </script>
@@ -91,34 +106,45 @@ const hideDetailDialog = (index: number) => {
           :style="`translate: ${translateCount}px`"
         >
           <div
-            class="bg-red-100 w-[115px] h-[250px] flex flex-col items-center mr-[25px] relative"
-            v-for="(item, index) in 41"
-            :key="item"
-            @mouseenter="showDetailDialog(index)"
-            @mouseleave="hideDetailDialog(index)"
+            class="bg-red-100 w-[115px] h-[250px] flex flex-col items-center mr-[25px] relative hover:cursor-pointer"
+            v-for="(item, index) in nowShowingList"
+            :key="item.id"
+            @mouseenter="(event) => showDetailDialog(event, item)"
+            @mouseleave="hideDetailDialog()"
           >
-            <img src="" alt="" class="h-[172px] bg-yellow-200 w-full" />
-            <div class="text-[14px] mt-[5px]">电影名</div>
-            <div class="text-[#ff9900]">
+            <img
+              :src="item.images.small"
+              alt=""
+              class="h-[172px] bg-yellow-200 w-full"
+            />
+            <div
+              class="text-[14px] mt-[5px] whitespace-nowrap text-ellipsis overflow-hidden w-[95px] text-center mx-auto"
+            >
+              {{ item.title }}
+            </div>
+            <div class="text-[#ff9900]" v-if="item.rating.average !== 0">
               <el-rate
-                v-model="value"
+                v-model="item.rating.average"
                 disabled
                 size="small"
                 style="--el-rate-icon-margin: 0px"
               />
-              {{ doubleValue }}
+              {{ item.rating.average * 2 }}
+            </div>
+            <div v-else class="text-[12px] h-[24px] leading-[24px]">
+              暂无评分
             </div>
             <el-button type="primary" style="height: 24px">选座购票</el-button>
             <!-- 悬浮框 -->
-            <div
-              class="absolute w-[250px] h-[200px] z-50 bg-white top-0 left-[125px] border p-[20px] hidden"
+            <!-- <div
+              class="absolute w-[250px] h-[200px] z-[100] bg-white top-0 left-[125px] border p-[20px] hidden"
               ref="detailDialog"
             >
               <span>你的名字</span>
               <span class="ml-[10px] text-gray-400 text-[12px]">2024</span>
               <div class="flex">
                 <el-rate
-                  v-model="value"
+                  v-model="item.rating.average"
                   disabled
                   size="small"
                   style="--el-rate-icon-margin: 0px"
@@ -135,8 +161,51 @@ const hideDetailDialog = (index: number) => {
                 导演导演导演导演导演导演导演导演导演导演导演
               </div>
               <div class="text-[12px]">主演</div>
-            </div>
+            </div> -->
           </div>
+        </div>
+      </div>
+      <!-- 悬浮框 -->
+      <div
+        class="fixed w-[250px] h-[200px] z-[100] bg-white border p-[20px]"
+        :style="`display: ${dialogVisible}; top: ${itemPosition.y}px; left: ${itemPosition.x}px;`"
+        ref="detailDialog"
+        v-if="currentItem.rating"
+      >
+        <span>{{ currentItem.title }}</span>
+        <span v-if="currentItem.original_title" class="ml-[5px]">{{
+          currentItem.original_title
+        }}</span>
+        <span class="ml-[10px] text-gray-400 text-[12px]">{{
+          currentItem.year
+        }}</span>
+        <div class="flex">
+          <el-rate
+            v-model="currentItem.rating.average"
+            disabled
+            size="small"
+            style="--el-rate-icon-margin: 0px"
+          />
+          <span
+            class="mx-[5px] text-[#ff9900] leading-[24px] inline-block"
+            v-if="currentItem.rating.average !== 0"
+          >
+            {{ currentItem.rating.average * 2 }}
+          </span>
+          <span
+            class="text-[12px] leading-[24px]"
+            v-if="currentItem.rating.average !== 0"
+            >({{ currentItem.collect_count }}人评分)</span
+          >
+        </div>
+        <!-- <div class="text-[12px] my-[10px]">129分钟 美国</div> -->
+        <div class="text-[12px] my-[10px]">
+          导演
+          <span>{{ directorsStr }}</span>
+        </div>
+        <div class="text-[12px]">
+          主演
+          <span>{{ castsStr }}</span>
         </div>
       </div>
     </div>
