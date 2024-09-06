@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue"
 import { getNowShowingAPI } from "@/axios/listAPI.js"
+import router from "@/router"
 // 当前页数
 const currentPage = ref(1)
 // 正在热映列表
@@ -93,6 +94,15 @@ const hideDetailDialog = () => {
     dialogVisible.value = "none"
   }
 }
+// 点击对象.跳转对应详情页
+const handelClick = (id: string) => {
+  router.push({
+    name: "detail",
+    params: {
+      id,
+    },
+  })
+}
 </script>
 
 <template>
@@ -157,6 +167,7 @@ const hideDetailDialog = () => {
             :key="item.id"
             @mouseenter="(event) => showDetailDialog(event, item)"
             @mouseleave="hideDetailDialog()"
+            @click="handelClick(item.id)"
           >
             <img
               :src="item.images.small"
