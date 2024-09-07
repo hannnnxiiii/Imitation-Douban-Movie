@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { useRouter } from "vue-router";
 import { ref } from "vue";
+const router = useRouter();
 const props = defineProps<{
   navList: object;
   itemList: ItemList[];
@@ -59,6 +61,10 @@ const emit = defineEmits(["changeTab", "showFilmFloat"]);
 const changeTab = (item: string, index: number) => {
   emit("changeTab", item);
   activeIndex.value = index;
+};
+// 点击对象进行跳转
+const goSubjectPage = (id: string) => {
+  router.push(`/subject/${id}`);
 };
 </script>
 
@@ -122,6 +128,7 @@ const changeTab = (item: string, index: number) => {
               <div
                 class="w-[115px] h-[210px] bg-yellow-200 mr-[25px] mb-[10px] flex flex-col items-center hover:cursor-pointer"
                 :class="{ clearMargin: (index + 1) % 5 === 0 }"
+                @click="goSubjectPage(item.id as string)"
               >
                 <img
                   :src="item.cover"
@@ -142,12 +149,11 @@ const changeTab = (item: string, index: number) => {
                 <!-- 上半部分 -->
                 <div class="p-[20px]">
                   <!-- 电影名 -->
-                  <RouterLink to="/">
-                    <span
-                      class="text-[18px] text-[#37a] hover:text-white hover:bg-[#37a] hover:cursor-pointer"
-                      >{{ props.floatInfo.title }}
-                    </span>
-                  </RouterLink>
+                  <span
+                    class="text-[18px] text-[#37a] hover:text-white hover:bg-[#37a] hover:cursor-pointer"
+                    @click="goSubjectPage(item.id as string)"
+                    >{{ props.floatInfo.title }}
+                  </span>
                   <!-- 评分 -->
                   <div class="flex items-center">
                     <el-rate
