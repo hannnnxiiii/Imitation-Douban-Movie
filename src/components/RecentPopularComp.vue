@@ -1,34 +1,65 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref } from "vue";
 const props = defineProps<{
-  navList: object
-  itemList: object
-}>()
+  navList: object;
+  itemList: ItemList[];
+  floatInfo: FloatInfo;
+}>();
+// 数据列表接口
+interface ItemList {
+  title?: string;
+  cover?: string;
+  rate?: string;
+  id?: string;
+}
+// 悬浮窗列表接口
+interface Short_comment {
+  content: string;
+  author: string;
+}
+interface FloatInfo {
+  title?: string;
+  id?: string;
+  star?: number;
+  rate?: string;
+  duration?: string;
+  region?: string;
+  types?: string[];
+  directors?: string[];
+  actors?: string;
+  short_comment?: Short_comment;
+}
 // 下一页
 const handleNext = () => {
   if (carousel.value) {
-    console.log(1)
+    console.log(1);
 
-    carousel.value.next()
+    carousel.value.next();
   }
-}
+};
 // 上一页
 
 const handlePrev = () => {
   if (carousel.value) {
-    carousel.value.prev()
+    carousel.value.prev();
   }
-}
+};
 
 // 高亮激活选项参数
-const activeIndex = ref<number>(0)
+const activeIndex = ref<number>(0);
 // 跑马灯接口
 interface Carousel {
-  prev: () => void
-  next: () => void
+  prev: () => void;
+  next: () => void;
 }
 // 跑马灯对象
-const carousel = ref<Carousel | null>(null)
+const carousel = ref<Carousel | null>(null);
+// 修改标签页
+const emit = defineEmits(["changeTab", "showFilmFloat"]);
+const changeTab = (item: string, index: number) => {
+  emit("changeTab", item);
+  activeIndex.value = index;
+};
 </script>
 
 <template>
@@ -48,6 +79,7 @@ const carousel = ref<Carousel | null>(null)
               v-for="(item, index) in props.navList"
               class="ml-[20px] text-[#9B9B9B] hover:cursor-pointer hover:text-white hover:bg-[#208ACC]"
               :class="{ active: index === activeIndex }"
+              @click="changeTab(item, index)"
             >
               {{ item }}
             </li>
@@ -73,55 +105,84 @@ const carousel = ref<Carousel | null>(null)
       :interval="6000"
       ref="carousel"
     >
-      <el-carousel-item v-for="item in 6" :key="item">
+      <el-carousel-item v-for="page in 5" :key="page">
         <div class="flex flex-wrap">
           <el-popover
-            v-for="(item, index) in 10"
+            v-for="(item, index) in itemList.slice((page - 1) * 10, page * 10)"
             placement="right-start"
             :width="350"
             trigger="hover"
             :show-arrow="false"
-            :show-after="500"
-            transition="none"
+            :show-after="300"
+            :key="item.id"
+            @show="$emit('showFilmFloat', item.id)"
           >
+            <!-- 激活悬浮框的元素 -->
             <template #reference>
               <div
-                class="w-[115px] h-[210px] bg-yellow-200 mr-[25px] mb-[10px] flex flex-col items-center"
+                class="w-[115px] h-[210px] bg-yellow-200 mr-[25px] mb-[10px] flex flex-col items-center hover:cursor-pointer"
                 :class="{ clearMargin: (index + 1) % 5 === 0 }"
               >
-                <img src="" alt="" class="h-[161px] bg-red-100 w-full" />
+                <img
+                  :src="item.cover"
+                  alt=""
+                  class="h-[161px] bg-red-100 w-full"
+                />
                 <div class="text-[13px] text-[#37A]">
-                  狗镇
-                  <span class="text-[#E09015] text-[13px]">7.0</span>
+                  {{ item.title }}
+                  <span class="text-[#E09015] text-[13px]">{{
+                    item.rate
+                  }}</span>
                 </div>
               </div>
             </template>
+            <!-- 悬浮框内容 -->
             <template #default>
-              <div>
+              <div v-if="item.id === props.floatInfo.id">
                 <!-- 上半部分 -->
                 <div class="p-[20px]">
                   <!-- 电影名 -->
                   <RouterLink to="/">
                     <span
                       class="text-[18px] text-[#37a] hover:text-white hover:bg-[#37a] hover:cursor-pointer"
-                      >因果报应 mahh (2024)
+                      >{{ props.floatInfo.title }}
                     </span>
                   </RouterLink>
                   <!-- 评分 -->
                   <div class="flex items-center">
                     <el-rate
-                      :model-value="4"
+                      :model-value="props.floatInfo.star"
                       disabled
                       style="--el-rate-icon-margin: -1px"
                     />
-                    <span class="text-[13px] text-[#ff9900] ml-[10px]">8</span>
+                    <span class="text-[13px] text-[#ff9900] ml-[10px]">{{
+                      props.floatInfo.rate
+                    }}</span>
                   </div>
                   <!-- 标签 -->
                   <div class="flex justify-start items-start flex-wrap">
                     <span
                       class="bg-[#f5f5f5] text-[13px] px-[8px] py-[2px] rounded-[12px] mx-[3px] my-[3px]"
-                      v-for="item in 5"
-                      >94分钟</span
+                      >{{ props.floatInfo.duration }}</span
+                    >
+                    <span
+                      class="bg-[#f5f5f5] text-[13px] px-[8px] py-[2px] rounded-[12px] mx-[3px] my-[3px]"
+                      >{{ props.floatInfo.region }}</span
+                    >
+                    <span
+                      class="bg-[#f5f5f5] text-[13px] px-[8px] py-[2px] rounded-[12px] mx-[3px] my-[3px]"
+                      v-for="item in props.floatInfo.types"
+                      >{{ item }}</span
+                    >
+                    <span
+                      class="bg-[#f5f5f5] text-[13px] px-[8px] py-[2px] rounded-[12px] mx-[3px] my-[3px]"
+                      v-for="item in props.floatInfo.directors"
+                      >{{ item }}(导演)</span
+                    >
+                    <span
+                      class="bg-[#f5f5f5] text-[13px] px-[8px] py-[2px] rounded-[12px] mx-[3px] my-[3px]"
+                      v-for="item in props.floatInfo.actors?.slice(0, 3)"
+                      >{{ item }}</span
                     >
                   </div>
                   <!-- 按钮 -->
@@ -140,9 +201,9 @@ const carousel = ref<Carousel | null>(null)
                 <div
                   class="border-t-[1px] bg-[#f5f5f5] p-[20px] text-[13px] text-[#666]"
                 >
-                  只能说坏人就是坏人，他会对自己家人好，但他还是人品低劣。好人就是好人，就算不是自己生的，还是会用正义和善良去对待，前边节奏太慢了，后边揭开一切，让人唏嘘，女孩子很坚强，警察比较有趣，虽然贪财，但真的办事
+                  {{ props.floatInfo.short_comment!.content }}
                   <span class="text-[12px] text-[#aaa]"
-                    >- AAA-渔经理୧⍤⃝💖的短评</span
+                    >- {{ props.floatInfo.short_comment!.author }}的短评</span
                   >
                 </div>
               </div>
