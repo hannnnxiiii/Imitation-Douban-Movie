@@ -2,10 +2,10 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="w-full bg-yellow-500 mb-[36px]">
+  <div class="w-full  mb-[36px]">
     <!-- 头部 -->
     <div
-      class="w-full h-[36px] border-b-[1px] mb-[18px] bg-blue-200 pb-[10px] flex items-end"
+      class="w-full h-[36px] border-b-[1px] mb-[18px]  pb-[10px] flex items-end"
     >
       <div>最受欢迎的影评</div>
       <RouterLink to="/"
@@ -28,14 +28,14 @@
         class="pb-[24px] border-b-[1px] mb-[24px] h-[144px] flex items-start justify-between"
       >
         <!-- 图片 -->
-        <div class="w-[68px] h-[95px] bg-red-100">
+        <div class="w-[68px] h-[95px] ">
           <img
             src="https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2912132824.webp"
             alt=""
           />
         </div>
         <!-- 文字 -->
-        <div class="w-[592px] h-full bg-purple-500">
+        <div class="w-[592px] h-full ">
           <a href="/"
             class="text-[15px] text-[#669] hover:text-white hover:bg-[#669]"
           >

@@ -70,9 +70,9 @@ const goSubjectPage = (id: string) => {
 </script>
 
 <template>
-  <div class="h-[524px] bg-blue-300 overflow-hidden relative">
+  <div class="h-[524px] overflow-hidden relative">
     <!-- 头部 -->
-    <div class="h-[36px] bg-yellow-100 border-b mb-[18px]">
+    <div class="h-[36px] border-b mb-[18px]">
       <div class="h-[25px] flex justify-between items-end">
         <!-- 头部左侧 -->
         <div class="flex">
@@ -127,15 +127,11 @@ const goSubjectPage = (id: string) => {
             <!-- 激活悬浮框的元素 -->
             <template #reference>
               <div
-                class="w-[115px] h-[210px] bg-yellow-200 mr-[25px] mb-[10px] flex flex-col items-center hover:cursor-pointer"
+                class="w-[115px] h-[210px] mr-[25px] mb-[10px] flex flex-col items-center hover:cursor-pointer"
                 :class="{ clearMargin: (index + 1) % 5 === 0 }"
                 @click="goSubjectPage(item.id as string)"
               >
-                <img
-                  :src="item.cover"
-                  alt=""
-                  class="h-[161px] bg-red-100 w-full"
-                />
+                <img :src="item.cover" alt="" class="h-[161px] w-full" />
                 <div
                   class="text-[13px] text-[#37A] overflow-hidden h-[49px] leading-[25px] px-[3px]"
                 >

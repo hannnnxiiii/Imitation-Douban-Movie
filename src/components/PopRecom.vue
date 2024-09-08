@@ -10,10 +10,10 @@ const carousel = ref<Carousle | null>(null)
 </script>
 
 <template>
-  <div class="w-full h-[293px] mb-[36px] bg-red-100">
+  <div class="w-full h-[293px] mb-[36px]">
     <!-- 头部 -->
     <div
-      class="pb-[10px] w-full h-[35px] mb-[18px] bg-orange-500 border-b-[1px] flex justify-between"
+      class="pb-[10px] w-full h-[35px] mb-[18px] border-b-[1px] flex justify-between"
     >
       <div>热门推荐</div>
       <div class="flex items-end">
@@ -53,7 +53,7 @@ const carousel = ref<Carousle | null>(null)
       </div>
     </div>
     <!-- 轮播图 -->
-    <div class="h-[240px] w-full bg-yellow-500">
+    <div class="h-[240px] w-full">
       <el-carousel
         height="240px"
         arrow="never"
@@ -62,13 +62,13 @@ const carousel = ref<Carousle | null>(null)
       >
         <el-carousel-item v-for="item in 2" :key="item">
           <div class="flex h-full w-full hover:cursor-pointer">
-            <div class="w-[350px] h-full bg-blue-300">
+            <div class="w-[350px] h-full">
               <img
                 src="https://img3.doubanio.com/view/movie_gallery_frame_hot_rec/m/public/742d8ac674f1053.jpg"
                 alt=""
               />
             </div>
-            <div class="w-[325px] h-full bg-red-300 p-[24px] pt-[48px]">
+            <div class="w-[325px] h-full p-[24px] pt-[48px]">
               <div class="mb-[18px] text-[18px] leading-[28px]">
                 标题标题标题标题标题标题标题标题标题
               </div>
