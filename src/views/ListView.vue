@@ -9,6 +9,7 @@ import {
 import router from "@/router"
 import RecentPopularComp from "@/components/RecentPopularComp.vue"
 import PopRecom from "@/components/PopRecom.vue"
+import PopReviews from "@/components/PopReviews.vue"
 // 当前页数
 const currentPage = ref(1)
 // 正在热映列表
@@ -359,6 +360,7 @@ const getTvFloat = async (id: string) => {
         <template #title><div>最近热门电视剧</div></template>
       </RecentPopularComp>
       <PopRecom></PopRecom>
+      <PopReviews></PopReviews>
     </div>
     <!-- 右侧 -->
     <div class="w-[300px] h-[3000px] bg-amber-300"></div>
