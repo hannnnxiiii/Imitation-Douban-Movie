@@ -1,71 +1,72 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-import { ref } from "vue";
-const router = useRouter();
+import { useRouter } from "vue-router"
+import { ref } from "vue"
+const router = useRouter()
 const props = defineProps<{
-  navList: object;
-  itemList: ItemList[];
-  floatInfo: FloatInfo;
-}>();
+  navList: object
+  itemList: ItemList[]
+  floatInfo: FloatInfo
+}>()
 // 数据列表接口
 interface ItemList {
-  title?: string;
-  cover?: string;
-  rate?: string;
-  id?: string;
+  title?: string
+  cover?: string
+  rate?: string
+  id?: string
 }
 // 悬浮窗列表接口
 interface Short_comment {
-  content: string;
-  author: string;
+  content: string
+  author: string
 }
 interface FloatInfo {
-  title?: string;
-  id?: string;
-  star?: number;
-  rate?: string;
-  duration?: string;
-  region?: string;
-  types?: string[];
-  directors?: string[];
-  actors?: string;
-  short_comment?: Short_comment;
+  title?: string
+  id?: string
+  star?: number
+  rate?: string
+  duration?: string
+  region?: string
+  types?: string[]
+  directors?: string[]
+  actors?: string
+  short_comment?: Short_comment
 }
 // 下一页
 const handleNext = () => {
   if (carousel.value) {
-    console.log(1);
+    console.log(1)
 
-    carousel.value.next();
+    carousel.value.next()
   }
-};
+}
 // 上一页
 
 const handlePrev = () => {
   if (carousel.value) {
-    carousel.value.prev();
+    carousel.value.prev()
   }
-};
+}
 
 // 高亮激活选项参数
-const activeIndex = ref<number>(0);
+const activeIndex = ref<number>(0)
 // 跑马灯接口
 interface Carousel {
-  prev: () => void;
-  next: () => void;
+  prev: () => void
+  next: () => void
+  setActiveItem: (index: number) => void
 }
 // 跑马灯对象
-const carousel = ref<Carousel | null>(null);
+const carousel = ref<Carousel | null>(null)
 // 修改标签页
-const emit = defineEmits(["changeTab", "showFilmFloat"]);
+const emit = defineEmits(["changeTab", "showFilmFloat"])
 const changeTab = (item: string, index: number) => {
-  emit("changeTab", item);
-  activeIndex.value = index;
-};
+  emit("changeTab", item)
+  activeIndex.value = index
+}
 // 点击对象进行跳转
 const goSubjectPage = (id: string) => {
-  router.push(`/subject/${id}`);
-};
+  router.push(`/subject/${id}`)
+}
 </script>
 
 <template>
@@ -135,7 +136,9 @@ const goSubjectPage = (id: string) => {
                   alt=""
                   class="h-[161px] bg-red-100 w-full"
                 />
-                <div class="text-[13px] text-[#37A]">
+                <div
+                  class="text-[13px] text-[#37A] overflow-hidden h-[49px] leading-[25px] px-[3px]"
+                >
                   {{ item.title }}
                   <span class="text-[#E09015] text-[13px]">{{
                     item.rate

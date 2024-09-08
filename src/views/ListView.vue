@@ -1,105 +1,106 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue"
 import {
   getFilmFloatAPI,
   getNowShowingAPI,
-  getPopFilmAPI,
-  getPopFilmTagAPI,
-} from "@/axios/listAPI.js";
-import router from "@/router";
-import RecentPopularComp from "@/components/RecentPopularComp.vue";
+  getRecentlyPopAPI,
+  getPopTagAPI,
+} from "@/axios/listAPI.js"
+import router from "@/router"
+import RecentPopularComp from "@/components/RecentPopularComp.vue"
+import PopRecom from "@/components/PopRecom.vue"
 // 当前页数
-const currentPage = ref(1);
+const currentPage = ref(1)
 // 正在热映列表
-const nowShowingList = ref<Item[]>([]);
+const nowShowingList = ref<Item[]>([])
 // 正在热映对象接口
 interface Rating {
-  average: number;
+  average: number
 }
 interface Images {
-  large: string;
-  medium: string;
-  small: string;
+  large: string
+  medium: string
+  small: string
 }
 interface Directors {
-  name: string;
-  id: string;
+  name: string
+  id: string
 }
 interface Casts {
-  name: string;
-  id: string;
+  name: string
+  id: string
 }
 interface Item {
-  rating: Rating;
-  id: string;
-  images: Images;
-  title: string;
-  original_title: string;
-  year: string;
-  collect_count: number;
-  directors: Directors[];
-  casts: Casts[];
+  rating: Rating
+  id: string
+  images: Images
+  title: string
+  original_title: string
+  year: string
+  collect_count: number
+  directors: Directors[]
+  casts: Casts[]
 }
 // 获取正在热映
 const getNowShowing = async () => {
-  const res = await getNowShowingAPI();
-  nowShowingList.value = res.data.subjects;
+  const res = await getNowShowingAPI()
+  nowShowingList.value = res.data.subjects
   nowShowingList.value.forEach((item: Item) => {
-    item.rating.average = item.rating.average / 2;
-  });
-};
-onMounted(() => getNowShowing());
+    item.rating.average = item.rating.average / 2
+  })
+}
+onMounted(() => getNowShowing())
 // 翻页进度
-const translateCount = ref(0);
+const translateCount = ref(0)
 // 下一页
 const handleNext = () => {
-  translateCount.value -= 700;
-};
+  translateCount.value -= 700
+}
 // 上一页
 const handlePrev = () => {
-  translateCount.value += 700;
-};
+  translateCount.value += 700
+}
 // 悬浮框对象
-const detailDialog = ref(null);
+const detailDialog = ref(null)
 // 弹窗倒计时
-let timer: number | null = null;
+let timer: number | null = null
 // 当前悬停的对象
-const currentItem = ref<Item>({} as Item);
+const currentItem = ref<Item>({} as Item)
 // 悬停对象的坐标
 const itemPosition = ref({
   x: 0,
   y: 0,
-});
+})
 // 导演名
-const directorsStr = ref("");
+const directorsStr = ref("")
 // 演员名
-const castsStr = ref("");
+const castsStr = ref("")
 // 悬浮框显示与否
-const dialogVisible = ref("none");
+const dialogVisible = ref("none")
 // 鼠标移入，1s后显示详情弹窗
 const showDetailDialog = (event: MouseEvent, item: Item) => {
   timer = setTimeout(() => {
-    currentItem.value = item;
-    directorsStr.value = item.directors.map((item) => item.name).join(" / ");
-    castsStr.value = item.casts.map((item) => item.name).join(" / ");
-    const target = event.target as HTMLElement;
+    currentItem.value = item
+    directorsStr.value = item.directors.map((item) => item.name).join(" / ")
+    castsStr.value = item.casts.map((item) => item.name).join(" / ")
+    const target = event.target as HTMLElement
     if (target) {
-      itemPosition.value.x = target.getBoundingClientRect().x + 125;
-      itemPosition.value.y = target.getBoundingClientRect().y;
+      itemPosition.value.x = target.getBoundingClientRect().x + 125
+      itemPosition.value.y = target.getBoundingClientRect().y
     }
 
-    dialogVisible.value = "block";
-  }, 500);
-};
+    dialogVisible.value = "block"
+  }, 500)
+}
 // 鼠标移出，关闭定时器，立马隐藏详情弹窗
 const hideDetailDialog = () => {
   if (timer) {
-    clearTimeout(timer);
+    clearTimeout(timer)
   }
   if (detailDialog.value) {
-    dialogVisible.value = "none";
+    dialogVisible.value = "none"
   }
-};
+}
 // 点击对象.跳转对应详情页
 const handelClick = (id: string) => {
   router.push({
@@ -107,66 +108,99 @@ const handelClick = (id: string) => {
     params: {
       id,
     },
-  });
-};
+  })
+}
 // 最近热门电影导航标签
-const popFilmNavList = ref<string[]>([]);
+const popFilmNavList = ref<string[]>([])
 // 最近热门电影列表
-const popFilmList = ref<PopFilmList[]>([]);
+const popFilmList = ref<PopFilmList[]>([])
 // 最近热门电影列表接口
 interface PopFilmList {
-  title: string;
-  rate: string;
-  cover: string;
-  id: string;
+  title: string
+  rate: string
+  cover: string
+  id: string
 }
 // 获取最近热门电影导航标签
 const getPopFilmTag = async () => {
-  const res = await getPopFilmTagAPI();
-  console.log(res);
-  popFilmNavList.value = res.data.tags;
-};
-onMounted(() => getPopFilmTag());
+  const res = await getPopTagAPI("movie")
+  console.log(res)
+  popFilmNavList.value = res.data.tags
+}
+onMounted(() => getPopFilmTag())
 // 获取最近热门电影列表
-const getPopFilm = async (tag: string) => {
-  console.log(tag);
+const getPopFilmList = async (tag: string) => {
+  console.log(tag)
 
-  const res = await getPopFilmAPI(tag);
-  console.log(res);
-  popFilmList.value = res.data.subjects;
-};
-onMounted(() => getPopFilm("热门"));
+  const res = await getRecentlyPopAPI(tag, "movie")
+  console.log(res)
+  popFilmList.value = res.data.subjects
+}
+onMounted(() => getPopFilmList("热门"))
 // 电影悬浮窗信息列表
-const flimFloatList = ref<FlimFloatList[]>([]);
+const flimFloatList = ref<FlimFloatList[]>([])
 // 电影悬浮窗信息列表接口
 interface FlimFloatList {
-  id: string;
+  id: string
 }
 // 电影悬浮窗单个对象
-const flimFloatInfo = ref<object>({});
-// 悬浮窗请求定时器
-let timer1: number | null = null;
+const flimFloatInfo = ref<object>({})
 // 获取电影悬浮窗信息
 const getFlimFloat = async (id: string) => {
   // 如果要找的元素在列表中已经存在，将其取出，直接return
   if (flimFloatList.value.find((item) => item.id === id)) {
     flimFloatInfo.value = flimFloatList.value.find(
       (item) => item.id === id
-    ) as object;
+    ) as object
   } else {
     // 如果不存在，发送请求
-    const res = await getFilmFloatAPI(id);
-    console.log(res);
-    flimFloatList.value.push(res.data.subject);
-    flimFloatInfo.value = res.data.subject;
+    const res = await getFilmFloatAPI(id)
+    console.log(res)
+    flimFloatList.value.push(res.data.subject)
+    flimFloatInfo.value = res.data.subject
   }
-};
-// 鼠标离开，清除定时器
-const clearTimer = () => {
-  if (timer1) {
-    clearTimeout(timer1);
+}
+// 最近热门电视剧列表
+const popTvList = ref<object[]>([])
+// 获取最近热门电视剧列表
+const getPopTvList = async (tag: string) => {
+  const res = await getRecentlyPopAPI(tag, "tv")
+  console.log(res)
+  popTvList.value = res.data.subjects
+}
+onMounted(() => getPopTvList("热门"))
+// 最近热门电影导航标签
+const popTvNavList = ref<string[]>([])
+// 获取最近热门电影导航标签
+const getPopTvTag = async () => {
+  const res = await getPopTagAPI("tv")
+  console.log(res)
+  popTvNavList.value = res.data.tags
+}
+onMounted(() => getPopTvTag())
+// 电影悬浮窗信息列表
+const tvFloatList = ref<TvFloatList[]>([])
+// 电影悬浮窗信息列表接口
+interface TvFloatList {
+  id: string
+}
+// 电影悬浮窗单个对象
+const tvFloatInfo = ref<object>({})
+// 获取电影悬浮窗信息
+const getTvFloat = async (id: string) => {
+  // 如果要找的元素在列表中已经存在，将其取出，直接return
+  if (tvFloatList.value.find((item) => item.id === id)) {
+    tvFloatInfo.value = tvFloatList.value.find(
+      (item) => item.id === id
+    ) as object
+  } else {
+    // 如果不存在，发送请求
+    const res = await getFilmFloatAPI(id)
+    console.log(res)
+    tvFloatList.value.push(res.data.subject)
+    tvFloatInfo.value = res.data.subject
   }
-};
+}
 </script>
 
 <template>
@@ -309,8 +343,22 @@ const clearTimer = () => {
         :item-list="popFilmList"
         @showFilmFloat="getFlimFloat"
         :float-info="flimFloatInfo"
-        @changeTab="getPopFilm"
-      ></RecentPopularComp>
+        @changeTab="getPopFilmList"
+        class="mb-[40px]"
+      >
+        <template #title><div>最近热门电影</div></template>
+      </RecentPopularComp>
+      <RecentPopularComp
+        :nav-list="popTvNavList"
+        :item-list="popTvList"
+        @showFilmFloat="getTvFloat"
+        :float-info="tvFloatInfo"
+        @changeTab="getPopTvList"
+        class="mb-[40px]"
+      >
+        <template #title><div>最近热门电视剧</div></template>
+      </RecentPopularComp>
+      <PopRecom></PopRecom>
     </div>
     <!-- 右侧 -->
     <div class="w-[300px] h-[3000px] bg-amber-300"></div>

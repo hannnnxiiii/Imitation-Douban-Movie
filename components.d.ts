@@ -14,6 +14,7 @@ declare module 'vue' {
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElPopover: typeof import('element-plus/es')['ElPopover']
     ElRate: typeof import('element-plus/es')['ElRate']
+    PopRecom: typeof import('./src/components/PopRecom.vue')['default']
     RecentPopularComp: typeof import('./src/components/RecentPopularComp.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
