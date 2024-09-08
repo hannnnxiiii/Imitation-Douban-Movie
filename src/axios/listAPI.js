@@ -7,7 +7,7 @@ export const getNowShowingAPI = () => {
     method: "POST",
     data: {
       start: 0,
-      count: 41,
+      count: 56,
       city: "杭州",
       apikey: "0ab215a8b1977939201640fa14c66bab",
     },

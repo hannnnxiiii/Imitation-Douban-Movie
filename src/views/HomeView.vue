@@ -166,4 +166,47 @@ const headerList = [
   </div>
   <!-- 二级路由出口 -->
   <RouterView></RouterView>
+  <!-- 页脚 -->
+  <div
+    class="border-dashed w-[1024px] mx-auto py-[6px] border-t-[1px] mt-[40px] flex justify-between"
+  >
+    <!-- 左侧 -->
+    <div class="text-[12px] text-[#999]">
+      © 2005－2024 douban.com, all rights reserved 北京豆网科技有限公司
+    </div>
+    <!-- 右侧 -->
+    <ul class="flex text-[12px] text-[#37A]">
+      <li class="mx-[4px] hover:text-white hover:bg-[#37A]">
+        <a href="/">关于豆瓣</a>
+      </li>
+      ·
+      <li class="mx-[4px] hover:text-white hover:bg-[#37A]">
+        <a href="/">在豆瓣工作</a>
+      </li>
+      ·
+      <li class="mx-[4px] hover:text-white hover:bg-[#37A]">
+        <a href="/">联系我们</a>
+      </li>
+      ·
+      <li class="mx-[4px] hover:text-white hover:bg-[#37A]">
+        <a href="/">法律声明</a>
+      </li>
+      ·
+      <li class="mx-[4px] hover:text-white hover:bg-[#37A]">
+        <a href="/">帮助中心</a>
+      </li>
+      ·
+      <li class="mx-[4px] hover:text-white hover:bg-[#37A]">
+        <a href="/">移动应用</a>
+      </li>
+      ·
+      <li class="mx-[4px] hover:text-white hover:bg-[#37A]">
+        <a href="/">移动风格</a>
+      </li>
+      ·
+      <li class="mx-[4px] hover:text-white hover:bg-[#37A]">
+        <a href="/">豆瓣广告</a>
+      </li>
+    </ul>
+  </div>
 </template>
