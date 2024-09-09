@@ -41,7 +41,7 @@ const ratingFive = computed(() =>
 </script>
 
 <template>
-  <div class="bg-white min-h-[400px] mb-[30px]">
+  <div class="min-h-[400px] mb-[30px]">
     <!-- 信息、评分 -->
     <div class="mb-[15px] flex items-start">
       <!-- 信息 -->

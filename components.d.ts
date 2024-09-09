@@ -22,5 +22,6 @@ declare module 'vue' {
     RelatedImages: typeof import('./src/components/RelatedImages.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SubjectRight: typeof import('./src/components/SubjectRight.vue')['default']
   }
 }
