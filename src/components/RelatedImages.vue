@@ -1,19 +1,24 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useSubjectStore } from "@/stores/subjectStore"
+import { storeToRefs } from "pinia"
+const subjectStore = useSubjectStore()
+const { videoInfo } = storeToRefs(subjectStore)
+</script>
 
 <template>
   <!-- 剧情简介 -->
   <div class="mb-[20px]">
     <h2 class="text-[#007722] text-[16px] mb-[12px]">
-      长腿的剧情简介 · · · · · ·
+      {{ videoInfo.title }}的剧情简介 · · · · · ·
     </h2>
     <p class="text-[13px] indent-[26px]">
-      横跨30年的10宗灭门惨案，所有遇害家庭都有一个共通点：有一位14号生日的小女生。
+      {{ videoInfo.summary }}
     </p>
   </div>
   <!-- 演职员 -->
-  <div>
+  <div v-if="videoInfo.casts.length !== 0">
     <h2 class="mt-[24px] mb-[12px] text-[#007722] text-[16px]">
-      长腿的演职员 · · · · · · (
+      {{ videoInfo.title }}的演职员 · · · · · · (
       <a
         href="/"
         class="text-[#37A] text-[13px] hover:text-white hover:bg-[#37a]"
@@ -24,22 +29,58 @@
     <div class="flex justify-between">
       <div
         class="w-[95px] flex flex-col text-[13px] items-center h-[182px] justify-between"
-        v-for="item in 6"
+        v-for="item in videoInfo.directors"
       >
         <img
-          src="https://img2.doubanio.com/view/celebrity/m/public/p53081.webp"
+          :src="item.avatars.small"
           alt=""
-          class="h-[133px]"
+          class="h-[133px] w-[95px] object-cover"
         />
-        <a href="" class="hover:text-white hover:bg-[#37a]">奥兹·珀金斯</a>
+        <a
+          :href="item.alt"
+          class="hover:text-white hover:bg-[#37a] truncate w-[95px]"
+          >{{ item.name }}</a
+        >
         <span class="text-[#9b9b9b]">导演</span>
+      </div>
+      <div
+        class="w-[95px] flex flex-col text-[13px] items-center h-[182px] justify-between"
+        v-for="item in videoInfo.casts"
+      >
+        <img
+          :src="item.avatars.small"
+          alt=""
+          class="h-[133px] w-[95px] object-cover"
+        />
+        <a
+          :href="item.alt"
+          class="hover:text-white hover:bg-[#37a] truncate w-[95px]"
+          >{{ item.name }}</a
+        >
+        <span class="text-[#9b9b9b]">演员</span>
+      </div>
+      <div
+        class="w-[95px] flex flex-col text-[13px] items-center h-[182px] justify-between"
+        v-if="videoInfo.casts.length + videoInfo.directors.length < 6"
+      >
+        <img
+          :src="videoInfo.casts[0].avatars.small"
+          alt=""
+          class="h-[133px] w-[95px] object-cover"
+        />
+        <a
+          :href="videoInfo.casts[0].alt"
+          class="hover:text-white hover:bg-[#37a] truncate w-[95px]"
+          >{{ videoInfo.casts[0].name }}</a
+        >
+        <span class="text-[#9b9b9b]">演员</span>
       </div>
     </div>
   </div>
   <!-- 视频和图片 -->
-  <div>
+  <div v-if="videoInfo.casts.length !== 0">
     <h2 class="mt-[24px] mb-[12px] text-[#007722] text-[16px]">
-      长腿的视频和图片 · · · · · · (
+      {{ videoInfo.title }}的视频和图片 · · · · · · (
       <a
         href=""
         class="text-[#37A] text-[13px] hover:text-white hover:bg-[#37a]"
@@ -49,7 +90,7 @@
       <a
         href=""
         class="text-[#37A] text-[13px] hover:text-white hover:bg-[#37a]"
-        >图片459</a
+        >图片{{ videoInfo.photos[0].photos_count }}</a
       >
       ·
       <a
@@ -79,29 +120,8 @@
         />
       </a>
       <!-- 图片 -->
-      <a href=""
-        ><img
-          src="https://img1.doubanio.com/view/photo/sqxs/public/p2909325978.webp"
-          alt=""
-          class="h-[115px]"
-      /></a>
-      <a href=""
-        ><img
-          src="https://img9.doubanio.com/view/photo/sqxs/public/p2912380364.webp"
-          alt=""
-          class="h-[115px]"
-      /></a>
-      <a href=""
-        ><img
-          src="https://img9.doubanio.com/view/photo/sqxs/public/p2911440324.webp"
-          alt=""
-          class="h-[115px]"
-      /></a>
-      <a href=""
-        ><img
-          src="https://img1.doubanio.com/view/photo/sqxs/public/p2910058158.webp"
-          alt=""
-          class="h-[115px]"
+      <a :href="item.alt" v-for="item in videoInfo.photos"
+        ><img :src="item.cover" alt="" class="w-[115px] h-[115px] object-cover"
       /></a>
     </div>
   </div>

@@ -9,3 +9,14 @@ export const getVideoDetailAPI = (id) => {
     },
   })
 }
+
+// 获取电影剧照
+export const getStillPhotosAPI = (id) => {
+  return instance1({
+    url: `/v2/movie/subject/${id}/photos`,
+    method: "POST",
+    data: {
+      apikey: "0df993c66c0c636e29ecbb5344252a4a",
+    },
+  })
+}

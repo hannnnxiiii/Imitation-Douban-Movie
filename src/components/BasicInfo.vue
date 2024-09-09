@@ -1,30 +1,43 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue"
-interface People {
-  alt: string
-  name: string
-}
-interface VideoDetail {
-  images: {
-    small: string
-  }
-  directors: People[]
-  casts: People[]
-  genres: string[]
-  countries: string[]
-  aka: string[]
-  rating: {
-    average: number
-  }
-  ratings_count: number
-}
-const props = defineProps<{
-  videoDetail: VideoDetail
-}>()
+import { useSubjectStore } from "@/stores/subjectStore"
+import { storeToRefs } from "pinia"
+const subjectStore = useSubjectStore()
+const { videoInfo } = storeToRefs(subjectStore)
 // 引用标签
 const references = ref<HTMLElement | null>(null)
 // el评分组件使用的数值
-const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
+const elRatingValue = computed(() => videoInfo.value.rating.average / 2)
+const ratingOne = computed(() =>
+  (
+    (videoInfo.value.rating.details[1] / videoInfo.value.ratings_count) *
+    100
+  ).toFixed(1)
+)
+const ratingTwo = computed(() =>
+  (
+    (videoInfo.value.rating.details[2] / videoInfo.value.ratings_count) *
+    100
+  ).toFixed(1)
+)
+const ratingThree = computed(() =>
+  (
+    (videoInfo.value.rating.details[3] / videoInfo.value.ratings_count) *
+    100
+  ).toFixed(1)
+)
+const ratingFour = computed(() =>
+  (
+    (videoInfo.value.rating.details[4] / videoInfo.value.ratings_count) *
+    100
+  ).toFixed(1)
+)
+const ratingFive = computed(() =>
+  (
+    (videoInfo.value.rating.details[5] / videoInfo.value.ratings_count) *
+    100
+  ).toFixed(1)
+)
 </script>
 
 <template>
@@ -37,37 +50,37 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
         <div class="mr-[15px] mt-[3px]">
           <a href="">
             <img
-              :src="videoDetail.images?.small"
+              :src="videoInfo.images.small"
               alt=""
               class="max-w-[135px] mb-[10px]"
             />
           </a>
         </div>
-        <div>
+        <div class="max-w-[333px]">
           <div class="text-[13px] text-[#666]">
-            导演：<span v-for="(item, index) in props.videoDetail.directors"
+            导演：<span v-for="(item, index) in videoInfo.directors"
               ><a
                 :href="item.alt"
                 class="text-[13px] text-[#37A] hover:text-white hover:bg-[#37A]"
                 >{{ item.name }}</a
-              ><span v-if="index + 1 !== props.videoDetail.directors.length">
+              ><span v-if="index + 1 !== videoInfo.directors.length">
                 /
               </span></span
             >
           </div>
           <div class="text-[13px] text-[#666]">
-            编剧：<span v-for="(item, index) in props.videoDetail.directors"
+            编剧：<span v-for="(item, index) in videoInfo.directors"
               ><a
                 :href="item.alt"
                 class="text-[13px] text-[#37A] hover:text-white hover:bg-[#37A]"
                 >{{ item.name }}</a
-              ><span v-if="index + 1 !== props.videoDetail.directors.length">
+              ><span v-if="index + 1 !== videoInfo.directors.length">
                 /
               </span></span
             >
           </div>
           <div class="text-[13px] text-[#666]">
-            主演：<span v-for="item in props.videoDetail.casts"
+            主演：<span v-for="item in videoInfo.casts"
               ><a
                 :href="item.alt"
                 class="text-[13px] text-[#37A] hover:text-white hover:bg-[#37A]"
@@ -81,10 +94,10 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
           </div>
           <div class="text-[13px] text-[#666]">
             类型：<span
-              v-for="(item, index) in props.videoDetail.genres"
+              v-for="(item, index) in videoInfo.genres"
               class="text-[#111]"
               >{{ item
-              }}<span v-if="index + 1 !== props.videoDetail.genres.length">
+              }}<span v-if="index + 1 !== videoInfo.genres.length">
                 /
               </span></span
             >
@@ -92,10 +105,10 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
           <div class="text-[13px] text-[#666]">
             制片国家/地区:
             <span
-              v-for="(item, index) in props.videoDetail.countries"
+              v-for="(item, index) in videoInfo.countries"
               class="text-[#111]"
               >{{ item
-              }}<span v-if="index + 1 !== props.videoDetail.countries.length">
+              }}<span v-if="index + 1 !== videoInfo.countries.length">
                 /
               </span></span
             >
@@ -108,27 +121,28 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
           </div>
           <div class="text-[13px] text-[#666]">
             上映日期:
-            <span v-for="(item, index) in 1" class="text-[#111]"
-              >2024-07-10(法国) / 2024-07-12(美国)<span v-if="false">
+            <span
+              v-for="(item, index) in videoInfo.pubdates"
+              class="text-[#111]"
+              >{{ item
+              }}<span v-if="index + 1 !== videoInfo.pubdates.length">
                 /
               </span></span
             >
           </div>
           <div class="text-[13px] text-[#666]">
             片长:
-            <span v-for="(item, index) in 1" class="text-[#111]"
-              >102分钟<span v-if="false"> / </span></span
+            <span
+              v-for="(item, index) in videoInfo.durations"
+              class="text-[#111]"
+              >{{ item }}<span v-if="false"> / </span></span
             >
           </div>
           <div class="text-[13px] text-[#666]">
             又名:
-            <span
-              v-for="(item, index) in props.videoDetail.aka"
-              class="text-[#111]"
+            <span v-for="(item, index) in videoInfo.aka" class="text-[#111]"
               >{{ item
-              }}<span v-if="index + 1 !== props.videoDetail.aka.length">
-                /
-              </span></span
+              }}<span v-if="index + 1 !== videoInfo.aka.length"> / </span></span
             >
           </div>
           <div class="text-[13px] text-[#666]">
@@ -159,9 +173,9 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
               >
             </span>
           </div>
-          <div class="h-[56px] flex" v-if="videoDetail.rating">
+          <div class="h-[56px] flex" v-if="videoInfo.rating">
             <div class="text-[28px] text-[#494949] leading-[56px]">
-              {{ videoDetail.rating.average }}
+              {{ videoInfo.rating.average }}
             </div>
             <div class="flex flex-col justify-center pl-[10px]">
               <el-rate
@@ -173,7 +187,7 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
                 class="text-[12px] text-[#669] hover:text-white hover:bg-[#669]"
               >
                 <a href="" class="pl-[2px]"
-                  >{{ videoDetail.ratings_count }}人评价</a
+                  >{{ videoInfo.ratings_count }}人评价</a
                 >
               </div>
             </div>
@@ -186,9 +200,9 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
               <span>5星</span>
               <div
                 class="h-[10px] bg-[#ffd596] mx-[5px]"
-                :style="`width:${80 * (parseInt('3.6%') / 100)}px;`"
+                :style="`width:${80 * (parseInt(`${ratingFive}%`) / 100)}px;`"
               ></div>
-              <span>3.6%</span>
+              <span>{{ ratingFive }}%</span>
             </div>
             <div
               class="flex text-[12px] items-center text-[#9b9b9b] leading-[14px]"
@@ -196,9 +210,9 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
               <span>4星</span>
               <div
                 class="h-[10px] bg-[#ffd596] mx-[5px]"
-                :style="`width:${80 * (parseInt('14.9%') / 100)}px;`"
+                :style="`width:${80 * (parseInt(`${ratingFour}%`) / 100)}px;`"
               ></div>
-              <span>14.9%</span>
+              <span>{{ ratingFour }}%</span>
             </div>
             <div
               class="flex text-[12px] items-center text-[#9b9b9b] leading-[14px]"
@@ -206,9 +220,9 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
               <span>3星</span>
               <div
                 class="h-[10px] bg-[#ffd596] mx-[5px]"
-                :style="`width:${80 * (parseInt('43.2%') / 100)}px;`"
+                :style="`width:${80 * (parseInt(`${ratingThree}%`) / 100)}px;`"
               ></div>
-              <span>43.2%</span>
+              <span>{{ ratingThree }}%</span>
             </div>
             <div
               class="flex text-[12px] items-center text-[#9b9b9b] leading-[14px]"
@@ -216,9 +230,9 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
               <span>2星</span>
               <div
                 class="h-[10px] bg-[#ffd596] mx-[5px]"
-                :style="`width:${80 * (parseInt('29.4%') / 100)}px;`"
+                :style="`width:${80 * (parseInt(`${ratingTwo}%`) / 100)}px;`"
               ></div>
-              <span>29.4%</span>
+              <span>{{ ratingTwo }}%</span>
             </div>
             <div
               class="flex text-[12px] items-center text-[#9b9b9b] leading-[14px]"
@@ -226,9 +240,9 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
               <span>1星</span>
               <div
                 class="h-[10px] bg-[#ffd596] mx-[5px]"
-                :style="`width:${80 * (parseInt('8.8%') / 100)}px;`"
+                :style="`width:${80 * (parseInt(`${ratingOne}%`) / 100)}px;`"
               ></div>
-              <span>8.8%</span>
+              <span>{{ ratingOne }}%</span>
             </div>
           </div>
         </div>
@@ -306,7 +320,12 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
         </div>
       </div>
       <el-button
-        style="width: 44px; height: 22px; color: #4f946e"
+        style="
+          width: 44px;
+          height: 22px;
+          color: #4f946e;
+          border: 1px solid #e3f1ed;
+        "
         color="#f2f8f2"
         >推荐</el-button
       >
