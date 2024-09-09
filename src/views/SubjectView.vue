@@ -20,7 +20,7 @@ const { videoInfo } = storeToRefs(subjectStore)
     </h1>
     <div class="w-[1024px] bg-red-100 flex justify-between">
       <!-- 左侧 -->
-      <div class="w-[675px] h-[3000px] bg-blue-300">
+      <div class="w-[675px] bg-blue-300">
         <!-- 基本信息 -->
         <BasicInfo></BasicInfo>
         <!-- 相关简介、图片和视频 -->
@@ -29,7 +29,7 @@ const { videoInfo } = storeToRefs(subjectStore)
         <CommentSection></CommentSection>
       </div>
       <!-- 右侧 -->
-      <div class="w-[300px] h-[3000px] bg-orange-500"></div>
+      <div class="w-[300px] bg-orange-500"></div>
     </div>
   </div>
 </template>
