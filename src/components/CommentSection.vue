@@ -85,7 +85,7 @@ import { Edit } from "@element-plus/icons-vue"
   </div>
 
   <!-- 影评 -->
-  <div>
+  <div class="mb-[25px]">
     <!-- 头部 -->
     <div class="h-[24px] mt-[16px] mb-[12px] flex items-center justify-between">
       <h2 class="text-[#007722] text-[16px]">
@@ -213,4 +213,50 @@ import { Edit } from "@element-plus/icons-vue"
     </div>
   </div>
   <!-- 讨论区 -->
+  <div>
+    <div
+      class="h-[36px] mt-[80px] pb-[12px] flex items-center justify-between border-b-[1px] border-dashed"
+    >
+      <h2 class="text-[#007722] text-[16px]">讨论区 · · · · · ·</h2>
+      <el-button
+        :icon="Edit"
+        style="
+          height: 24px;
+          color: #ca6445;
+          width: 106px;
+          font-size: 13px;
+          border-radius: 2px;
+        "
+        color="#fae9da"
+        >添加新讨论</el-button
+      >
+    </div>
+    <div
+      class="py-[8px] text-[13px] text-[#666] flex border-b-[1px] border-dashed"
+      v-for="item in 5"
+    >
+      <span class="w-[350px] pr-[3px]">
+        <a href="" class="text-[#37a] hover:text-white hover:bg-[#37a] truncate"
+          >有没有画风类似的番！</a
+        >
+      </span>
+      <span class="pr-[3px] w-[141px]"
+        >来自<a
+          href=""
+          class="text-[#37a] hover:text-white hover:bg-[#37a] truncate"
+          >豆友wzrafz0wZU</a
+        ></span
+      >
+      <span class="pr-[3px] w-[45px]">4 回应</span>
+      <span>2024-09-09 00:53:21</span>
+    </div>
+    <div class="flex items-center justify-end my-[13px]">
+      <a
+        href=""
+        class="text-[13px] text-[#37a] hover:text-white hover:bg-[#37a]"
+      >
+        > 去这部影片的讨论区（全部42条）</a
+      >
+    </div>
+  </div>
 </template>
