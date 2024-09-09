@@ -38,7 +38,7 @@ const { videoInfo } = storeToRefs(subjectStore)
         />
         <a
           :href="item.alt"
-          class="hover:text-white hover:bg-[#37a] truncate w-[95px]"
+          class="hover:text-white hover:bg-[#37a] truncate w-[95px] text-center"
           >{{ item.name }}</a
         >
         <span class="text-[#9b9b9b]">导演</span>
@@ -54,7 +54,7 @@ const { videoInfo } = storeToRefs(subjectStore)
         />
         <a
           :href="item.alt"
-          class="hover:text-white hover:bg-[#37a] truncate w-[95px]"
+          class="hover:text-white hover:bg-[#37a] truncate w-[95px] text-center"
           >{{ item.name }}</a
         >
         <span class="text-[#9b9b9b]">演员</span>
@@ -70,7 +70,7 @@ const { videoInfo } = storeToRefs(subjectStore)
         />
         <a
           :href="videoInfo.casts[0].alt"
-          class="hover:text-white hover:bg-[#37a] truncate w-[95px]"
+          class="hover:text-white hover:bg-[#37a] truncate w-[95px] text-center"
           >{{ videoInfo.casts[0].name }}</a
         >
         <span class="text-[#9b9b9b]">演员</span>
