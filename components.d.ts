@@ -18,6 +18,7 @@ declare module 'vue' {
     PopRecom: typeof import('./src/components/PopRecom.vue')['default']
     PopReviews: typeof import('./src/components/PopReviews.vue')['default']
     RecentPopularComp: typeof import('./src/components/RecentPopularComp.vue')['default']
+    RelatedImages: typeof import('./src/components/RelatedImages.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

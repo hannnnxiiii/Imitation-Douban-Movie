@@ -28,11 +28,11 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
 </script>
 
 <template>
-  <div class="bg-yellow-500 min-h-[400px] mb-[30px]">
+  <div class="bg-white min-h-[400px] mb-[30px]">
     <!-- 信息、评分 -->
     <div class="mb-[15px] flex items-start">
       <!-- 信息 -->
-      <div class="w-[500px] h-[300px] bg-red-100 flex">
+      <div class="w-[500px] h-[300px] flex">
         <!-- 电影海报 -->
         <div class="mr-[15px] mt-[3px]">
           <a href="">
@@ -142,7 +142,7 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
       <!-- 评分 -->
       <div class="border-l-[1px] pl-[15px] w-[171px]">
         <div
-          class="h-[157px] mt-[2px] bg-red-500 pb-[15px]"
+          class="h-[157px] mt-[2px] pb-[15px]"
           @mouseenter="references!.style.display = 'flex'"
           @mouseleave="references!.style.display = 'none'"
         >
@@ -250,7 +250,7 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
       </div>
     </div>
     <!-- 想看、看过 -->
-    <div class="h-[47px] pt-[20px] pb-[3px] bg-blue-500 flex items-center">
+    <div class="h-[47px] pt-[20px] pb-[3px] flex items-center">
       <el-button style="width: 49px; height: 24px; background-color: #ffeada"
         >想 看</el-button
       >
@@ -271,7 +271,7 @@ const elRatingValue = computed(() => props.videoDetail.rating.average / 2)
       </span>
     </div>
     <!-- 写短评、写影评 -->
-    <div class="h-[23px] bg-red-500 flex justify-between">
+    <div class="h-[23px] flex justify-between">
       <div class="flex">
         <div class="flex items-center mr-[15px]">
           <img

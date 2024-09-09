@@ -3,6 +3,7 @@ import BasicInfo from "@/components/BasicInfo.vue"
 import { getVideoDetailAPI } from "@/axios/detailAPI.js"
 import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
+import RelatedImages from "@/components/RelatedImages.vue"
 const route = useRoute()
 interface People {
   alt: string
@@ -48,6 +49,8 @@ onMounted(() => getVideoDetail())
       <div class="w-[675px] h-[3000px] bg-blue-300">
         <!-- 基本信息 -->
         <BasicInfo :video-detail="videoDetail"></BasicInfo>
+        <!-- 相关简介、图片和视频 -->
+        <RelatedImages></RelatedImages>
       </div>
       <!-- 右侧 -->
       <div class="w-[300px] h-[3000px] bg-orange-500"></div>
