@@ -1,6 +1,10 @@
 import { ref, computed } from "vue"
 import { defineStore } from "pinia"
-import { getStillPhotosAPI, getVideoDetailAPI } from "@/axios/detailAPI.js"
+import {
+  getFilmReviewAPI,
+  getStillPhotosAPI,
+  getVideoDetailAPI,
+} from "@/axios/detailAPI.js"
 interface People {
   alt: string
   name: string
@@ -62,7 +66,7 @@ export const useSubjectStore = defineStore("subject", () => {
         5: 0,
       },
     },
-    ratings_count: 0,
+    ratings_count: 1,
     photos: [],
     pubdates: [],
     summary: "",
@@ -75,9 +79,25 @@ export const useSubjectStore = defineStore("subject", () => {
     console.log(res1)
 
     const res2 = await getVideoDetailAPI(id)
-    videoInfo.value = res2.data
-    videoInfo.value.photos = res1.data.photos.slice(0, 4)
+    videoInfo.value = {
+      ...videoInfo.value,
+      ...res2.data,
+      rating: {
+        average: 0,
+        details: {
+          1: 0,
+          2: 0,
+          3: 0,
+          4: 0,
+          5: 0,
+        },
+      },
+    }
+    const res3 = await getFilmReviewAPI(id)
+    console.log(res3)
     videoInfo.value.rating = res1.data.subject.rating
+
+    videoInfo.value.photos = res1.data.photos.slice(0, 4)
     videoInfo.value.pubdates = res1.data.subject.pubdates
     videoInfo.value.durations = res1.data.subject.durations
 

@@ -78,7 +78,7 @@ const { videoInfo } = storeToRefs(subjectStore)
     </div>
   </div>
   <!-- 视频和图片 -->
-  <div v-if="videoInfo.casts.length !== 0">
+  <div v-if="videoInfo.photos.length !== 0">
     <h2 class="mt-[24px] mb-[12px] text-[#007722] text-[16px]">
       {{ videoInfo.title }}的视频和图片 · · · · · · (
       <a

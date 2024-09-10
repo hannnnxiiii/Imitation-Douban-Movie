@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue"
+import { computed, onBeforeMount, onMounted, ref } from "vue"
 import { useSubjectStore } from "@/stores/subjectStore"
 import { storeToRefs } from "pinia"
 const subjectStore = useSubjectStore()
