@@ -6,10 +6,36 @@ import { useSubjectStore } from "@/stores/subjectStore"
 import { storeToRefs } from "pinia"
 import CommentSection from "@/components/CommentSection.vue"
 import SubjectRight from "@/components/SubjectRight.vue"
+import { ElLoading } from "element-plus"
+import { onMounted, watch } from "vue"
+import "element-plus/es/components/message/style/css"
 const subjectStore = useSubjectStore()
 const route = useRoute()
 subjectStore.getInfoObj(route.params.id as string)
 const { videoInfo } = storeToRefs(subjectStore)
+// 加载动画
+let loading: {
+  close: () => void
+}
+const openFullScreen = () => {
+  loading = ElLoading.service({
+    lock: true,
+    text: "Loading",
+    background: "rgba(0, 0, 0, 0.7)",
+  })
+  console.log(loading)
+}
+onMounted(() => openFullScreen())
+watch(
+  () => videoInfo.value.photos,
+  () => {
+    if (videoInfo.value.id === route.params.id) {
+      console.log(videoInfo.value.id)
+
+      loading.close()
+    }
+  }
+)
 </script>
 
 <template>

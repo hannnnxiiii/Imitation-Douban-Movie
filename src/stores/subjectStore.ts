@@ -64,6 +64,7 @@ interface VideoInfo {
   reviews: Reviews[]
   comments_count: number
   reviews_count: number
+  id: string
 }
 
 export const useSubjectStore = defineStore("subject", () => {
@@ -95,6 +96,7 @@ export const useSubjectStore = defineStore("subject", () => {
     reviews: [],
     comments_count: 0,
     reviews_count: 0,
+    id: "",
   })
 
   // 获取详情页完整信息

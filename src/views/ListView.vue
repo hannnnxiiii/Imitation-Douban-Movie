@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import {
   getFilmFloatAPI,
   getNowShowingAPI,
@@ -11,6 +11,8 @@ import router from "@/router"
 import RecentPopularComp from "@/components/RecentPopularComp.vue"
 import PopRecom from "@/components/PopRecom.vue"
 import PopReviews from "@/components/PopReviews.vue"
+import { ElLoading } from "element-plus"
+import "element-plus/es/components/message/style/css"
 // 当前页数
 const currentPage = ref(1)
 // 正在热映列表
@@ -43,6 +45,24 @@ interface Item {
   directors: Directors[]
   casts: Casts[]
 }
+// 加载动画
+let loading: {
+  close: () => void
+}
+const openFullScreen = () => {
+  loading = ElLoading.service({
+    lock: true,
+    text: "Loading",
+    background: "rgba(0, 0, 0, 0.7)",
+  })
+  console.log(loading)
+}
+onMounted(() => openFullScreen())
+watch(nowShowingList, () => {
+  if (nowShowingList.value.length !== 0) {
+    loading.close()
+  }
+})
 // 获取正在热映
 const getNowShowing = async () => {
   const res = await getNowShowingAPI()

@@ -24,6 +24,10 @@ const router = createRouter({
       ],
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    // return 期望滚动到哪个的位置
+    return { top: 0 }
+  },
 })
 
 export default router
