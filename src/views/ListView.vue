@@ -5,6 +5,7 @@ import {
   getNowShowingAPI,
   getRecentlyPopAPI,
   getPopTagAPI,
+  getWeeklyReputationAPI,
 } from "@/axios/listAPI.js"
 import router from "@/router"
 import RecentPopularComp from "@/components/RecentPopularComp.vue"
@@ -210,6 +211,24 @@ const closeAd = () => {
     ad.value.style.display = "none"
   }
 }
+// 一周口碑榜
+const weeklyReputationList = ref<string[]>([])
+// 一周口碑榜对象接口
+interface WeeklyReputation {
+  subject: {
+    title: string
+  }
+}
+// 获取一周口碑榜
+const getWeeklyReputation = async () => {
+  const res = await getWeeklyReputationAPI()
+  console.log(res)
+  weeklyReputationList.value = res.data.subjects.map(
+    (item: WeeklyReputation) => item.subject.title
+  )
+  console.log(weeklyReputationList.value)
+}
+onMounted(() => getWeeklyReputation())
 </script>
 
 <template>
@@ -402,14 +421,14 @@ const closeAd = () => {
         <!-- 排行榜 -->
         <ol>
           <li
-            v-for="(item, index) in 10"
+            v-for="(item, index) in weeklyReputationList"
             class="h-[36px] py-[7px] border-b-[1px] text-[9px] flex items-center pl-[5px]"
           >
             {{ index + 1 }}
             <a
               href="/"
               class="text-[13px] text-[#37A] hover:text-white hover:bg-[#37A] ml-[5px]"
-              >姥姥的外孙</a
+              >{{ item }}</a
             >
           </li>
         </ol>

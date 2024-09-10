@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { Edit } from "@element-plus/icons-vue"
+import { useSubjectStore } from "@/stores/subjectStore"
+import { storeToRefs } from "pinia"
+const subjectStore = useSubjectStore()
+const { videoInfo } = storeToRefs(subjectStore)
 </script>
 
 <template>
@@ -8,11 +12,11 @@ import { Edit } from "@element-plus/icons-vue"
     <!-- 头部 -->
     <div class="h-[24px] mt-[16px] mb-[12px] flex items-center justify-between">
       <h2 class="text-[#007722] text-[16px]">
-        通往夏天的隧道，再见的出口的短评 · · · · · ·
+        {{ videoInfo.title }}的短评 · · · · · ·
         <span class="text-[13px] text-[#666]"
           >(
           <a href="" class="text-[#37A] hover:text-white hover:bg-[#37A]"
-            >全部 6003 条</a
+            >全部 {{ videoInfo.comments_count }} 条</a
           >
           )</span
         >
@@ -79,7 +83,7 @@ import { Edit } from "@element-plus/icons-vue"
     <div class="text-[13px]">
       >
       <a href="" class="text-[#37a] hover:text-white hover:bg-[#37a]"
-        >更多短评 6003条</a
+        >更多短评 {{ videoInfo.comments_count }}条</a
       >
     </div>
   </div>
@@ -89,11 +93,11 @@ import { Edit } from "@element-plus/icons-vue"
     <!-- 头部 -->
     <div class="h-[24px] mt-[16px] mb-[12px] flex items-center justify-between">
       <h2 class="text-[#007722] text-[16px]">
-        通往夏天的隧道，再见的出口的影评 · · · · · ·
+        {{ videoInfo.title }}的影评 · · · · · ·
         <span class="text-[13px] text-[#666]"
           >(
           <a href="" class="text-[#37A] hover:text-white hover:bg-[#37A]"
-            >全部 77 条</a
+            >全部 {{ videoInfo.reviews_count }} 条</a
           >
           )</span
         >
@@ -121,22 +125,25 @@ import { Edit } from "@element-plus/icons-vue"
     </div>
     <!-- 内容 -->
     <ul>
-      <li class="py-[14px] border-t-[1px]" v-for="item in 5">
+      <li
+        class="py-[14px] border-t-[1px]"
+        v-for="item in videoInfo.reviews.slice(0, 10)"
+      >
         <!-- 第一行 -->
         <div class="text-[13px] flex items-center justify-start">
           <div class="flex items-center">
             <img
               class="w-[24px] h-[24px] rounded-full mr-[10px]"
-              src="https://img3.doubanio.com/icon/u116531248-2.jpg"
+              :src="item.author.avatar"
               alt=""
             />
             <a
               href=""
               class="mr-[3px] text-[#37A] hover:text-white hover:bg-[#37a]"
-              >kakakarl</a
+              >{{ item.author.name }}</a
             >
             <el-rate
-              :model-value="4"
+              :model-value="item.rating.value"
               disabled
               style="
                 height: 11px;
@@ -145,7 +152,7 @@ import { Edit } from "@element-plus/icons-vue"
                 --el-rate-icon-size: 14px;
               "
             />
-            <span class="ml-[6px] text-[#aaa]">2023-07-21 21:31:57</span>
+            <span class="ml-[6px] text-[#aaa]">{{ item.created_at }}</span>
           </div>
         </div>
         <!-- 内容 -->
@@ -155,7 +162,7 @@ import { Edit } from "@element-plus/icons-vue"
             <a
               href=""
               class="text-[14px] text-[#37a] hover:text-white hover:bg-[#37a]"
-              >新时代的商业罐头，老体系的命题作文</a
+              >{{ item.title }}</a
             >
           </h2>
           <!-- 剧透提醒 -->
@@ -166,7 +173,7 @@ import { Edit } from "@element-plus/icons-vue"
           </div>
           <!-- 影评内容 -->
           <p class="text-[#494949]">
-            赶在影片下线前去影院看了。对原作完全没有了解，看cast和staff也没有大手，因此期待值并不高。实际看完以后虽然有诸多抱怨，但并不觉得踩雷。在开头先给出结论——一部彻底的工业化青春动画电影，一篇严格遵照《你的名字》体系且没有任何突破的命题作文。适合在流媒体上线时随...(<span
+            {{ item.summary }}(<span
               class="text-[#37A] hover:text-white hover:bg-[#37a] hover:cursor-pointer"
               >展开</span
             >)
@@ -184,7 +191,7 @@ import { Edit } from "@element-plus/icons-vue"
               border-radius: 2px;
             "
             color="#f0f7f9"
-            >△ 40</el-button
+            >△ {{ item.useful_count }}</el-button
           >
           <el-button
             style="
@@ -196,11 +203,11 @@ import { Edit } from "@element-plus/icons-vue"
               border-radius: 2px;
             "
             color="#f0f7f9"
-            >▽ 6</el-button
+            >▽ {{ item.useless_count }}</el-button
           >
           <span
             class="text-[13px] text-[#37a] hover:text-white hover:bg-[#37a] ml-[10px] hover:cursor-pointer"
-            >6回应</span
+            >{{ item.comments_count }}回应</span
           >
         </div>
       </li>
@@ -208,7 +215,7 @@ import { Edit } from "@element-plus/icons-vue"
     <div class="text-[13px]">
       >
       <a href="" class="text-[#37a] hover:text-white hover:bg-[#37a]"
-        >更多影评 77篇</a
+        >更多影评 {{ videoInfo.reviews_count }}篇</a
       >
     </div>
   </div>

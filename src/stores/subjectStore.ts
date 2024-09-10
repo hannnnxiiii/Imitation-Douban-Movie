@@ -17,6 +17,24 @@ interface Photos {
   cover: string
   alt: string
 }
+interface Reviews {
+  alt: string
+  author: {
+    alt: string
+    avatar: string
+    name: string
+  }
+  comments_count: number
+  content: string
+  created_at: string
+  rating: {
+    value: number
+  }
+  summary: string
+  title: string
+  useful_count: string
+  useless_count: string
+}
 interface VideoInfo {
   title: string
   year: string
@@ -43,6 +61,9 @@ interface VideoInfo {
   pubdates: string[]
   summary: string
   durations: string[]
+  reviews: Reviews[]
+  comments_count: number
+  reviews_count: number
 }
 
 export const useSubjectStore = defineStore("subject", () => {
@@ -71,6 +92,9 @@ export const useSubjectStore = defineStore("subject", () => {
     pubdates: [],
     summary: "",
     durations: [],
+    reviews: [],
+    comments_count: 0,
+    reviews_count: 0,
   })
 
   // 获取详情页完整信息
@@ -100,7 +124,7 @@ export const useSubjectStore = defineStore("subject", () => {
     videoInfo.value.photos = res1.data.photos.slice(0, 4)
     videoInfo.value.pubdates = res1.data.subject.pubdates
     videoInfo.value.durations = res1.data.subject.durations
-
+    videoInfo.value.reviews = res3.data.reviews
     console.log(videoInfo.value)
   }
 

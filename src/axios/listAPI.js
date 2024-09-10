@@ -61,3 +61,14 @@ export const getFilmFloatAPI = (subject_id) => {
     },
   })
 }
+
+// 获取一周口碑榜
+export const getWeeklyReputationAPI = () => {
+  return instance1({
+    url: "/v2/movie/weekly",
+    method: "POST",
+    data: {
+      apikey: "0df993c66c0c636e29ecbb5344252a4a",
+    },
+  })
+}
