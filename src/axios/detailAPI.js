@@ -31,3 +31,11 @@ export const getFilmReviewAPI = (id) => {
     },
   })
 }
+
+// 获取完整影评
+export const getFullReviewAPI = (id) => {
+  return instance2({
+    url: `/j/review/${id}/full`,
+    method: "GET",
+  })
+}

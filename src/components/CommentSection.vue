@@ -2,8 +2,36 @@
 import { Edit } from "@element-plus/icons-vue"
 import { useSubjectStore } from "@/stores/subjectStore"
 import { storeToRefs } from "pinia"
+import { getFullReviewAPI } from "@/axios/detailAPI.js"
+import { ref, watch } from "vue"
 const subjectStore = useSubjectStore()
 const { videoInfo } = storeToRefs(subjectStore)
+// 影评内容区
+const filmReview = ref<HTMLElement[] | null>(null)
+// 完整评价替换区域
+const fullReview = ref<HTMLElement[] | null>(null)
+// 影评总结
+const summaryReview = ref<HTMLElement[] | null>(null)
+// 收起按钮
+const retract = ref<HTMLElement[] | null>(null)
+// 互动区
+const interactiveZone = ref<HTMLElement[] | null>(null)
+// 点击展开，获取完整评价
+const getFullReview = async (id: string, index: number) => {
+  const res = await getFullReviewAPI(id)
+  summaryReview.value![index].style.display = "none"
+  fullReview.value![index].innerHTML = res.data.body
+    .replace("main-title-tip", "hidden")
+    .replace("copyright", "copyright text-[#999] my-[20px]")
+  fullReview.value![index].style.display = "block"
+  retract.value![index].style.display = "block"
+}
+// 收起完整评价
+const retractReview = (index: number) => {
+  summaryReview.value![index].style.display = "block"
+  fullReview.value![index].style.display = "none"
+  retract.value![index].style.display = "none"
+}
 </script>
 
 <template>
@@ -127,7 +155,8 @@ const { videoInfo } = storeToRefs(subjectStore)
     <ul>
       <li
         class="py-[14px] border-t-[1px]"
-        v-for="item in videoInfo.reviews.slice(0, 10)"
+        v-for="(item, index) in videoInfo.reviews.slice(0, 10)"
+        ref="filmReview"
       >
         <!-- 第一行 -->
         <div class="text-[13px] flex items-center justify-start">
@@ -167,48 +196,59 @@ const { videoInfo } = storeToRefs(subjectStore)
           </h2>
           <!-- 剧透提醒 -->
           <div
-            class="mb-[5px] pl-[8px] border-l-[1px] border-black text-[#9b9b9b] h-[13px] leading-[13px]"
+            class="mb-[5px] pl-[8px] border-l-[1px] border-[#999] text-[#9b9b9b] h-[13px] leading-[13px]"
           >
             这篇影评可能有剧透
           </div>
-          <!-- 影评内容 -->
-          <p class="text-[#494949]">
+          <!-- 影评总结 -->
+          <p class="text-[#494949]" ref="summaryReview">
             {{ item.summary }}(<span
               class="text-[#37A] hover:text-white hover:bg-[#37a] hover:cursor-pointer"
+              @click="getFullReview(item.id, index)"
               >展开</span
             >)
           </p>
+          <div ref="fullReview" class="hidden"></div>
         </div>
         <!-- 互动区 -->
-        <div class="flex items-center mt-[18px]">
-          <el-button
-            style="
-              height: 21px;
-              padding: 4px 6px;
-              font-size: 12px;
-              color: #37a;
-              border: 0;
-              border-radius: 2px;
-            "
-            color="#f0f7f9"
-            >△ {{ item.useful_count }}</el-button
+        <div class="flex mt-[18px] justify-between" ref="interactiveZone">
+          <div class="flex items-center">
+            <el-button
+              style="
+                height: 21px;
+                padding: 4px 6px;
+                font-size: 12px;
+                color: #37a;
+                border: 0;
+                border-radius: 2px;
+              "
+              color="#f0f7f9"
+              >△ {{ item.useful_count }}</el-button
+            >
+            <el-button
+              style="
+                height: 21px;
+                padding: 4px 6px;
+                font-size: 12px;
+                color: #37a;
+                border: 0;
+                border-radius: 2px;
+              "
+              color="#f0f7f9"
+              >▽ {{ item.useless_count }}</el-button
+            >
+            <span
+              class="text-[13px] text-[#37a] hover:text-white hover:bg-[#37a] ml-[10px] hover:cursor-pointer"
+              >{{ item.comments_count }}回应</span
+            >
+          </div>
+          <div
+            class="hidden text-[13px] text-[#999] hover:cursor-pointer"
+            ref="retract"
+            @click="retractReview(index)"
           >
-          <el-button
-            style="
-              height: 21px;
-              padding: 4px 6px;
-              font-size: 12px;
-              color: #37a;
-              border: 0;
-              border-radius: 2px;
-            "
-            color="#f0f7f9"
-            >▽ {{ item.useless_count }}</el-button
-          >
-          <span
-            class="text-[13px] text-[#37a] hover:text-white hover:bg-[#37a] ml-[10px] hover:cursor-pointer"
-            >{{ item.comments_count }}回应</span
-          >
+            收起
+          </div>
         </div>
       </li>
     </ul>

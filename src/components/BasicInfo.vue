@@ -9,35 +9,30 @@ const references = ref<HTMLElement | null>(null)
 // el评分组件使用的数值
 const elRatingValue = computed(() => videoInfo.value.rating.average / 2)
 const ratingOne = computed(() =>
-  (
-    (videoInfo.value.rating.details[1] / videoInfo.value.ratings_count) *
-    100
-  ).toFixed(1)
+  ((videoInfo.value.rating.details[1] / ratingSum.value) * 100).toFixed(1)
 )
 const ratingTwo = computed(() =>
-  (
-    (videoInfo.value.rating.details[2] / videoInfo.value.ratings_count) *
-    100
-  ).toFixed(1)
+  ((videoInfo.value.rating.details[2] / ratingSum.value) * 100).toFixed(1)
 )
 const ratingThree = computed(() =>
-  (
-    (videoInfo.value.rating.details[3] / videoInfo.value.ratings_count) *
-    100
-  ).toFixed(1)
+  ((videoInfo.value.rating.details[3] / ratingSum.value) * 100).toFixed(1)
 )
 const ratingFour = computed(() =>
-  (
-    (videoInfo.value.rating.details[4] / videoInfo.value.ratings_count) *
-    100
-  ).toFixed(1)
+  ((videoInfo.value.rating.details[4] / ratingSum.value) * 100).toFixed(1)
 )
 const ratingFive = computed(() =>
-  (
-    (videoInfo.value.rating.details[5] / videoInfo.value.ratings_count) *
-    100
-  ).toFixed(1)
+  ((videoInfo.value.rating.details[5] / ratingSum.value) * 100).toFixed(1)
 )
+// 接口数据滞后，自己累加做模拟优化体验
+const ratingSum = computed(
+  () =>
+    videoInfo.value.rating.details[5] +
+    videoInfo.value.rating.details[4] +
+    videoInfo.value.rating.details[3] +
+    videoInfo.value.rating.details[2] +
+    videoInfo.value.rating.details[1]
+)
+console.log(ratingSum.value)
 </script>
 
 <template>

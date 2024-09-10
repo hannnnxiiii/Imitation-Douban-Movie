@@ -34,6 +34,7 @@ interface Reviews {
   title: string
   useful_count: string
   useless_count: string
+  id: string
 }
 interface VideoInfo {
   title: string
