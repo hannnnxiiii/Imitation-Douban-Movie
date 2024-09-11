@@ -4,6 +4,11 @@ import { useSubjectStore } from "@/stores/subjectStore"
 import { storeToRefs } from "pinia"
 import { getFullReviewAPI } from "@/axios/detailAPI.js"
 import { ref, watch } from "vue"
+import { useElementBounding } from "@vueuse/core"
+import type { Ref, WatchHandle } from "vue"
+import { useWindowSize } from "@vueuse/core"
+
+const { width, height } = useWindowSize()
 const subjectStore = useSubjectStore()
 const { videoInfo } = storeToRefs(subjectStore)
 // 影评内容区
@@ -16,6 +21,13 @@ const summaryReview = ref<HTMLElement[] | null>(null)
 const retract = ref<HTMLElement[] | null>(null)
 // 互动区
 const interactiveZone = ref<HTMLElement[] | null>(null)
+// interface ElementBounding {
+//   top: Ref<number>
+// }
+// let elementBounding: ElementBounding = {
+//   top: ref<number>(0),
+// }
+let unwatch = null
 // 点击展开，获取完整评价
 const getFullReview = async (id: string, index: number) => {
   const res = await getFullReviewAPI(id)
@@ -25,13 +37,41 @@ const getFullReview = async (id: string, index: number) => {
     .replace("copyright", "copyright text-[#999] my-[20px]")
   fullReview.value![index].style.display = "block"
   retract.value![index].style.display = "block"
+  const { top, bottom, left } = useElementBounding(filmReview.value![index])
+  unwatch = watch(
+    () => top.value,
+    () => {
+      console.log(top.value, bottom.value, left.value)
+      console.log(interactiveZone.value![index].style.position)
+      if (bottom.value >= height.value && top.value <= height.value - 60) {
+        interactiveZone.value![index].style.position = "fixed"
+        interactiveZone.value![index].style.top = `${height.value - 81}px`
+        interactiveZone.value![index].style.left = `${left.value}px`
+        interactiveZone.value![index].classList.add("fixedStyle")
+      } else {
+        interactiveZone.value![index].style.position = "static"
+        interactiveZone.value![index].classList.remove("fixedStyle")
+      }
+    },
+    { immediate: true }
+  )
 }
 // 收起完整评价
 const retractReview = (index: number) => {
   summaryReview.value![index].style.display = "block"
   fullReview.value![index].style.display = "none"
   retract.value![index].style.display = "none"
+  interactiveZone.value![index].style.position = "static"
+  interactiveZone.value![index].classList.remove("fixedStyle")
+  unwatch()
 }
+// 点击展开
+// 第一次调用函数
+// 函数内包含三种情况：
+// 1.top值大于等于视口高度减点赞区高度，点赞区在文档流
+// 2.bottom值小于等于视口高度减点赞区高度，点赞区在文档流
+// 3.其余情况，点赞区固定在视口底部。top值应为视口高度减点赞区高度，left值应为元素left值。
+// 此后每次滚动都调用一次该函数。
 </script>
 
 <template>
@@ -211,7 +251,10 @@ const retractReview = (index: number) => {
           <div ref="fullReview" class="hidden"></div>
         </div>
         <!-- 互动区 -->
-        <div class="flex mt-[18px] justify-between" ref="interactiveZone">
+        <div
+          class="flex mt-[18px] justify-between bg-white w-[675px]"
+          ref="interactiveZone"
+        >
           <div class="flex items-center">
             <el-button
               style="
@@ -307,3 +350,11 @@ const retractReview = (index: number) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.fixedStyle {
+  padding: 20px 0;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+</style>
