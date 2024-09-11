@@ -232,11 +232,16 @@ const closeAd = () => {
   }
 }
 // 一周口碑榜
-const weeklyReputationList = ref<string[]>([])
+interface WeeklyReputationList {
+  title: string
+  id: string
+}
+const weeklyReputationList = ref<WeeklyReputationList[]>([])
 // 一周口碑榜对象接口
 interface WeeklyReputation {
   subject: {
     title: string
+    id: string
   }
 }
 // 获取一周口碑榜
@@ -244,7 +249,12 @@ const getWeeklyReputation = async () => {
   const res = await getWeeklyReputationAPI()
   console.log(res)
   weeklyReputationList.value = res.data.subjects.map(
-    (item: WeeklyReputation) => item.subject.title
+    (item: WeeklyReputation) => {
+      return {
+        title: item.subject.title,
+        id: item.subject.id,
+      }
+    }
   )
   console.log(weeklyReputationList.value)
 }
@@ -446,9 +456,9 @@ onMounted(() => getWeeklyReputation())
           >
             {{ index + 1 }}
             <a
-              href="/"
+              :href="`http://localhost:5173/subject/${item.id}`"
               class="text-[13px] text-[#37A] hover:text-white hover:bg-[#37A] ml-[5px]"
-              >{{ item }}</a
+              >{{ item.title }}</a
             >
           </li>
         </ol>
