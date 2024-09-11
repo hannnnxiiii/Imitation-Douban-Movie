@@ -7,7 +7,9 @@ import { ref, watch } from "vue"
 import { useElementBounding } from "@vueuse/core"
 import type { Ref, WatchHandle } from "vue"
 import { useWindowSize } from "@vueuse/core"
+import { useWindowScroll } from "@vueuse/core"
 
+const { x, y } = useWindowScroll()
 const { width, height } = useWindowSize()
 const subjectStore = useSubjectStore()
 const { videoInfo } = storeToRefs(subjectStore)
@@ -27,7 +29,7 @@ const interactiveZone = ref<HTMLElement[] | null>(null)
 // let elementBounding: ElementBounding = {
 //   top: ref<number>(0),
 // }
-let unwatch = null
+const unwatchList = ref<Array<() => void>>([])
 // 点击展开，获取完整评价
 const getFullReview = async (id: string, index: number) => {
   const res = await getFullReviewAPI(id)
@@ -38,7 +40,7 @@ const getFullReview = async (id: string, index: number) => {
   fullReview.value![index].style.display = "block"
   retract.value![index].style.display = "block"
   const { top, bottom, left } = useElementBounding(filmReview.value![index])
-  unwatch = watch(
+  const unwatch = watch(
     () => top.value,
     () => {
       console.log(top.value, bottom.value, left.value)
@@ -55,15 +57,19 @@ const getFullReview = async (id: string, index: number) => {
     },
     { immediate: true }
   )
+  unwatchList.value[index] = unwatch
 }
 // 收起完整评价
 const retractReview = (index: number) => {
+  const { top } = useElementBounding(filmReview.value![index])
+  y.value += top.value
   summaryReview.value![index].style.display = "block"
   fullReview.value![index].style.display = "none"
   retract.value![index].style.display = "none"
   interactiveZone.value![index].style.position = "static"
   interactiveZone.value![index].classList.remove("fixedStyle")
-  unwatch()
+  unwatchList.value[index]()
+  unwatchList.value[index] = () => {}
 }
 // 点击展开
 // 第一次调用函数
