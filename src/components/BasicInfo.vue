@@ -130,7 +130,10 @@ console.log(ratingSum.value)
             <span
               v-for="(item, index) in videoInfo.durations"
               class="text-[#111]"
-              >{{ item }}<span v-if="false"> / </span></span
+              >{{ item
+              }}<span v-if="index + 1 !== videoInfo.durations.length">
+                /
+              </span></span
             >
           </div>
           <div class="text-[13px] text-[#666]">
