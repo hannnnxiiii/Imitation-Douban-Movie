@@ -62,7 +62,7 @@ const getFullReview = async (id: string, index: number) => {
 // 收起完整评价
 const retractReview = (index: number) => {
   const { top } = useElementBounding(filmReview.value![index])
-  y.value = y.value + top.value + 50
+  y.value = y.value + top.value - 100
   summaryReview.value![index].style.display = "block"
   fullReview.value![index].style.display = "none"
   retract.value![index].style.display = "none"
