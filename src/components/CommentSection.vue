@@ -5,12 +5,11 @@ import { storeToRefs } from "pinia"
 import { getFullReviewAPI } from "@/axios/detailAPI.js"
 import { ref, watch } from "vue"
 import { useElementBounding } from "@vueuse/core"
-import type { Ref, WatchHandle } from "vue"
 import { useWindowSize } from "@vueuse/core"
 import { useWindowScroll } from "@vueuse/core"
 
-const { x, y } = useWindowScroll()
-const { width, height } = useWindowSize()
+const { y } = useWindowScroll()
+const { height } = useWindowSize()
 const subjectStore = useSubjectStore()
 const { videoInfo } = storeToRefs(subjectStore)
 // 影评内容区
