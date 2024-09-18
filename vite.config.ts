@@ -46,4 +46,5 @@ export default defineConfig({
       },
     },
   },
+  base: "/imitation-douban-movie/",
 })
