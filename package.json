@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist -r git@github.com:hannnnxiiii/imitation-douban-movie.git"
   },
   "dependencies": {
     "@vueuse/core": "^11.0.3",
